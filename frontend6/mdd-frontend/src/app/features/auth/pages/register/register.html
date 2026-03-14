@@ -1,0 +1,87 @@
+<div class="register-page">
+
+    <!-- Top header bar with logo -->
+    <header class="top-bar">
+        <img src="logo_p6.png" alt="MDD Logo" class="top-bar-logo" />
+    </header>
+
+    <!-- Main content -->
+    <div class="register-content">
+
+        <!-- Back arrow + Title -->
+        <div class="register-title-row">
+            <a routerLink="/" class="back-arrow" aria-label="Retour">←</a>
+            <h1 class="register-title">Inscription</h1>
+        </div>
+
+        <!-- Error banner -->
+        <div class="error-banner" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate class="register-form">
+
+            <!-- Nom d'utilisateur -->
+            <div class="form-field">
+                <label for="username">Nom d'utilisateur</label>
+                <input
+                    id="username"
+                    type="text"
+                    formControlName="username"
+                    [class.input-error]="username?.invalid && username?.touched">
+                <span class="error-text"
+                    *ngIf="username?.touched && username?.hasError('required')">
+                    Nom d'utilisateur est obligatoire
+                </span>
+                <span class="error-text"
+                    *ngIf="username?.touched && username?.hasError('minlength')">
+                    Nom d'utilisateur doit être au moins 3 caractères
+                </span>
+            </div>
+
+            <!-- Adresse e-mail -->
+            <div class="form-field">
+                <label for="email">Adresse e-mail</label>
+                <input
+                    id="email"
+                    type="email"
+                    formControlName="email"
+                    [class.input-error]="email?.invalid && email?.touched">
+                <span class="error-text"
+                    *ngIf="email?.touched && email?.hasError('required')">
+                    L'adresse e-mail est obligatoire
+                </span>
+                <span class="error-text"
+                    *ngIf="email?.touched && email?.hasError('email')">
+                    L'adresse e-mail n'est pas valide
+                </span>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="form-field">
+                <label for="password">Mot de passe</label>
+                <input
+                    id="password"
+                    [type]="hidePassword ? 'password' : 'text'"
+                    formControlName="password"
+                    [class.input-error]="password?.invalid && password?.touched">
+                <span class="error-text"
+                    *ngIf="password?.touched && password?.hasError('required')">
+                    Le mot de passe est obligatoire
+                </span>
+                <span class="error-text"
+                    *ngIf="password?.touched && password?.hasError('minlength')">
+                    Le mot de passe doit contenir au moins 8 caractères
+                </span>
+            </div>
+
+            <!-- Submit -->
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" [disabled]="isLoading">
+                    {{ isLoading ? 'Inscription en cours...' : "S'inscrire" }}
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>

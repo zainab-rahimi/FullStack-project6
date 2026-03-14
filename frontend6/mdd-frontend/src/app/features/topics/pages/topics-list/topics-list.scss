@@ -1,0 +1,95 @@
+.topics-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+/* ── Grid ── */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+/* ── Card ── */
+.topic-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.topic-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.topic-description {
+  font-size: 0.9rem;
+  color: #444;
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Subscribe button ── */
+.btn-subscribe {
+  align-self: center;
+  margin-top: 0.75rem;
+  padding: 0.6rem 2rem;
+  font-size: 0.9rem;
+  font-family: inherit;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  /* Default: S'abonner (purple) */
+  background-color: #7c4dff;
+  color: white;
+
+  &:hover {
+    background-color: #6a3de8;
+  }
+
+  /* Subscribed state (grey) */
+  &.subscribed {
+    background-color: #999;
+    color: white;
+
+    &:hover {
+      background-color: #777;
+    }
+  }
+}
+
+/* ── Status / Error ── */
+.topics-status {
+  text-align: center;
+  color: #666;
+  padding: 2rem 0;
+}
+
+.topics-error {
+  text-align: center;
+  color: #b71c1c;
+  padding: 2rem 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .topics-container {
+    padding: 1rem;
+  }
+
+  .topics-grid {
+    grid-template-columns: 1fr;
+  }
+}

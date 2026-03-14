@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+
+<div class="topics-container">
+
+  <!-- Loading -->
+  <p *ngIf="isLoading" class="topics-status">Chargement...</p>
+
+  <!-- Error -->
+  <p *ngIf="errorMessage" class="topics-error">{{ errorMessage }}</p>
+
+  <!-- Empty state -->
+  <p *ngIf="!isLoading && !errorMessage && topics.length === 0" class="topics-status">
+    Aucun thème disponible pour le moment.
+  </p>
+
+  <!-- Topics grid -->
+  <div class="topics-grid" *ngIf="!isLoading && topics.length > 0">
+
+    <div class="topic-card" *ngFor="let topic of topics">
+      <h3 class="topic-title">{{ topic.name }}</h3>
+      <p class="topic-description">{{ topic.description }}</p>
+
+      <button
+        class="btn-subscribe"
+        [class.subscribed]="topic.subscribed"
+        (click)="toggleSubscription(topic)">
+        {{ topic.subscribed ? 'Déjà abonné' : "S'abonner" }}
+      </button>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,82 @@
+.feed-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+/* ── Action bar ── */
+.feed-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-create {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.5rem;
+  background-color: #7c4dff;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #6a3de8;
+  }
+}
+
+.btn-sort {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: #333;
+  font-family: inherit;
+
+  &:hover {
+    color: #7c4dff;
+  }
+}
+
+/* ── Grid ── */
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+/* ── Status / Error ── */
+.feed-status {
+  text-align: center;
+  color: #666;
+  padding: 2rem 0;
+}
+
+.feed-error {
+  text-align: center;
+  color: #b71c1c;
+  padding: 2rem 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .feed-container {
+    padding: 1rem;
+  }
+
+  .feed-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-create {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+  }
+}

@@ -1,0 +1,19 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <a routerLink="/articles">
+      <img src="logo_p6.png" alt="MDD Logo" class="navbar-logo" />
+    </a>
+  </div>
+
+  <div class="navbar-right">
+    <a class="nav-logout" (click)="logout()">Se déconnecter</a>
+    <a routerLink="/articles" routerLinkActive="nav-active" class="nav-link">Articles</a>
+    <a routerLink="/topics" routerLinkActive="nav-active" class="nav-link">Thèmes</a>
+    <a routerLink="/profile" class="nav-avatar">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 4-7 8-7s8 3 8 7"/>
+      </svg>
+    </a>
+  </div>
+</nav>

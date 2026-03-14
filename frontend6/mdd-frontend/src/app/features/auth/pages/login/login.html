@@ -1,0 +1,61 @@
+<div class="login-page">
+
+    <!-- Top header bar with logo -->
+    <header class="top-bar">
+        <img src="logo_p6.png" alt="MDD Logo" class="top-bar-logo" />
+    </header>
+
+    <!-- Main content -->
+    <div class="login-content">
+
+        <!-- Back arrow + Title -->
+        <div class="login-title-row">
+            <a routerLink="/" class="back-arrow" aria-label="Retour">←</a>
+            <h1 class="login-title">Se connecter</h1>
+        </div>
+
+        <!-- Error banner -->
+        <div class="error-banner" *ngIf="errorMessage">
+            {{ errorMessage }}
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate class="login-form">
+
+            <!-- Identifier -->
+            <div class="form-field">
+                <label for="identifier">E-mail ou nom d'utilisateur</label>
+                <input
+                    id="identifier"
+                    type="text"
+                    formControlName="identifier"
+                    [class.input-error]="identifier?.invalid && identifier?.touched">
+                <span class="error-text"
+                    *ngIf="identifier?.touched && identifier?.hasError('required')">
+                    Ce champ est obligatoire
+                </span>
+            </div>
+
+            <!-- Mot de passe -->
+            <div class="form-field">
+                <label for="password">Mot de passe</label>
+                <input
+                    id="password"
+                    [type]="hidePassword ? 'password' : 'text'"
+                    formControlName="password"
+                    [class.input-error]="password?.invalid && password?.touched">
+                <span class="error-text"
+                    *ngIf="password?.touched && password?.hasError('required')">
+                    Le mot de passe est obligatoire
+                </span>
+            </div>
+
+            <!-- Submit -->
+            <div class="form-actions">
+                <button type="submit" class="btn-submit" [disabled]="isLoading">
+                    {{ isLoading ? 'Connexion en cours...' : 'Se connecter' }}
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>

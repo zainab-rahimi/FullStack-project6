@@ -1,0 +1,63 @@
+<app-navbar></app-navbar>
+
+<div class="create-content">
+
+  <!-- Back arrow + Title -->
+  <div class="create-title-row">
+    <a routerLink="/articles" class="back-arrow" aria-label="Retour">←</a>
+    <h1 class="create-title">Créer un nouvel article</h1>
+  </div>
+
+  <!-- Error banner -->
+  <div class="error-banner" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <form [formGroup]="articleForm" (ngSubmit)="onSubmit()" novalidate class="create-form">
+
+    <!-- Topic select -->
+    <div class="form-field">
+      <select formControlName="topicId"
+              [class.input-error]="topicId?.invalid && topicId?.touched">
+        <option value="" disabled>Sélectionner un thème</option>
+        <option *ngFor="let topic of topics" [value]="topic.id">{{ topic.name }}</option>
+      </select>
+      <span class="error-text" *ngIf="topicId?.touched && topicId?.hasError('required')">
+        Veuillez sélectionner un thème
+      </span>
+    </div>
+
+    <!-- Title -->
+    <div class="form-field">
+      <input
+        type="text"
+        formControlName="title"
+        placeholder="Titre de l'article"
+        [class.input-error]="title?.invalid && title?.touched">
+      <span class="error-text" *ngIf="title?.touched && title?.hasError('required')">
+        Le titre est obligatoire
+      </span>
+    </div>
+
+    <!-- Content -->
+    <div class="form-field">
+      <textarea
+        formControlName="content"
+        placeholder="Contenu de l'article"
+        rows="10"
+        [class.input-error]="content?.invalid && content?.touched">
+      </textarea>
+      <span class="error-text" *ngIf="content?.touched && content?.hasError('required')">
+        Le contenu est obligatoire
+      </span>
+    </div>
+
+    <!-- Submit -->
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="isLoading">
+        {{ isLoading ? 'Création...' : 'Créer' }}
+      </button>
+    </div>
+
+  </form>
+</div>

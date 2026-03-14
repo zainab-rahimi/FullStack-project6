@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+
+<div class="feed-container">
+
+  <!-- Action bar -->
+  <div class="feed-actions">
+    <a routerLink="/articles/create" class="btn-create">Créer un article</a>
+    <button class="btn-sort" (click)="toggleSort()">
+      Trier par {{ sortOrder === 'desc' ? '↓' : '↑' }}
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <p *ngIf="isLoading" class="feed-status">Chargement...</p>
+
+  <!-- Error -->
+  <p *ngIf="errorMessage" class="feed-error">{{ errorMessage }}</p>
+
+  <!-- Empty state -->
+  <p *ngIf="!isLoading && !errorMessage && articles.length === 0" class="feed-status">
+    Aucun article pour le moment. Abonnez-vous à des thèmes pour voir des articles ici.
+  </p>
+
+  <!-- Articles grid -->
+  <div class="feed-grid" *ngIf="!isLoading && articles.length > 0">
+    <app-article-card
+      *ngFor="let article of articles"
+      [article]="article">
+    </app-article-card>
+  </div>
+
+</div>

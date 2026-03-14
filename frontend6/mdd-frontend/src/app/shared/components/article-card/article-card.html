@@ -1,0 +1,8 @@
+<a class="card" [routerLink]="['/articles', article.id]">
+  <h3 class="card-title">{{ article.title }}</h3>
+  <div class="card-meta">
+    <span class="card-date">{{ article.createdAt | date:'dd/MM/yyyy' }}</span>
+    <span class="card-author">{{ article.authorUsername }}</span>
+  </div>
+  <p class="card-content">{{ article.content }}</p>
+</a>
