@@ -1,1 +1,62 @@
-<p>article-detail works!</p>
+<app-navbar></app-navbar>
+
+<div class="detail-container">
+  @if (isLoading()) {
+    <p class="loading">Chargement...</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else if (article()) {
+    <div class="detail-header">
+      <button class="back-btn" (click)="goBack()" aria-label="Retour">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+      </button>
+      <h1 class="article-title">{{ article()!.title }}</h1>
+    </div>
+
+    <div class="article-meta">
+      <span>{{ article()!.createdAt | date:'dd/MM/yyyy' }}</span>
+      <span>{{ article()!.authorUsername }}</span>
+      <span>{{ article()!.topicName }}</span>
+    </div>
+
+    <div class="article-content">
+      <p>{{ article()!.content }}</p>
+    </div>
+
+    <hr class="divider" />
+
+    <section class="comments-section">
+      <h2 class="comments-title">Commentaires</h2>
+
+      @for (comment of article()!.comments; track comment.id) {
+        <app-comment-card [comment]="comment"></app-comment-card>
+      }
+
+      <div class="comment-input-row">
+        <textarea
+          class="comment-input"
+          [value]="newComment()"
+          (input)="newComment.set($any($event.target).value)"
+          placeholder="Écrivez ici votre commentaire"
+          rows="3"
+        ></textarea>
+        <button
+          class="send-btn"
+          (click)="submitComment()"
+          [disabled]="isSubmitting() || !newComment().trim()"
+          aria-label="Envoyer"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28"
+               fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </div>
+    </section>
+  }
+</div>
