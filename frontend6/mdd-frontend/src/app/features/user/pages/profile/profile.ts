@@ -21,6 +21,6 @@ export class Profile {
     this.email = 'email@email.fr';
   }
   saveProfile(): void {
-    console.log('Saving profile: ', { username})
+    console.log('Saving profile: ', { username: this.username })
   }
 }

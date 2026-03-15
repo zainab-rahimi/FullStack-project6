@@ -46,4 +46,8 @@ export class ArticleService {
   createArticle(request: ArticleRequest): Observable<ArticleResponse> {
     return this.http.post<ArticleResponse>(this.baseUrl, request);
   }
+
+  addComment(articleId: number, request: { content: string }): Observable<CommentResponse> {
+    return this.http.post<CommentResponse>(`${this.baseUrl}/${articleId}/comments`, request);
+  }
 }
