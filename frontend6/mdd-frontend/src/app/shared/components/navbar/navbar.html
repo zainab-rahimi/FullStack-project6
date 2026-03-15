@@ -1,11 +1,13 @@
 <nav class="navbar">
+  <!-- Logo -->
   <div class="navbar-left">
     <a routerLink="/articles">
       <img src="logo_p6.png" alt="MDD Logo" class="navbar-logo" />
     </a>
   </div>
 
-  <div class="navbar-right">
+  <!-- Desktop links -->
+  <div class="navbar-right desktop-only">
     <a class="nav-logout" (click)="logout()">Se déconnecter</a>
     <a routerLink="/articles" routerLinkActive="nav-active" class="nav-link">Articles</a>
     <a routerLink="/topics" routerLinkActive="nav-active" class="nav-link">Thèmes</a>
@@ -16,4 +18,36 @@
       </svg>
     </a>
   </div>
+
+  <!-- Hamburger button (mobile only) -->
+  <button class="hamburger mobile-only" (click)="toggleMenu()" aria-label="Ouvrir le menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
+
+<!-- Overlay -->
+<div class="nav-overlay" [ngClass]="{ 'overlay-visible': menuOpen }" (click)="closeMenu()"></div>
+
+<!-- Side drawer -->
+<aside class="nav-drawer" [ngClass]="{ 'open': menuOpen }">
+  <!-- Profile avatar at top of drawer -->
+  <div class="drawer-header">
+    <a routerLink="/profile" class="nav-avatar" (click)="closeMenu()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 4-7 8-7s8 3 8 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <nav class="drawer-nav">
+    <a routerLink="/articles" routerLinkActive="nav-active" class="drawer-link" (click)="closeMenu()">Articles</a>
+    <a routerLink="/topics" routerLinkActive="nav-active" class="drawer-link" (click)="closeMenu()">Thèmes</a>
+  </nav>
+
+  <div class="drawer-footer">
+    <a class="nav-logout" (click)="logout()">Se déconnecter</a>
+  </div>
+</aside>
