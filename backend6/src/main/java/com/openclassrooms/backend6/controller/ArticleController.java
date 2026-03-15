@@ -20,8 +20,9 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/feed")
-    public ResponseEntity<List<ArticleResponse>> getFeed(Authentication auth) {
-        return ResponseEntity.ok(articleService.getFeed(auth.getName()));
+    public ResponseEntity<List<ArticleResponse>> getFeed(Authentication auth,
+                                                         @RequestParam(value = "sort", defaultValue = "desc") String sort) {
+        return ResponseEntity.ok(articleService.getFeed(auth.getName(), sort));
     }
 
     @PostMapping
