@@ -6,7 +6,9 @@ import com.openclassrooms.backend6.entity.Article;
 import com.openclassrooms.backend6.entity.Topic;
 import com.openclassrooms.backend6.entity.User;
 import com.openclassrooms.backend6.exception.ResourceNotFoundException;
+import com.openclassrooms.backend6.dto.comment.CommentResponse;
 import com.openclassrooms.backend6.repository.ArticleRepository;
+import com.openclassrooms.backend6.repository.CommentRepository;
 import com.openclassrooms.backend6.repository.TopicRepository;
 import com.openclassrooms.backend6.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,10 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final TopicRepository topicRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
-    public List<ArticleResponse> getFeed(String userEmail) {
+    public List<ArticleResponse> getFeed(String userEmail, String sort) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
@@ -40,8 +43,11 @@ public class ArticleService {
                 .map(Topic::getId)
                 .toList();
 
-        return articleRepository.findByTopicIdsOrderByCreatedAtDesc(topicIds)
-                .stream().map(this::toResponse).toList();
+        List<Article> articles = "asc".equalsIgnoreCase(sort)
+                ? articleRepository.findByTopicIdsOrderByCreatedAtAsc(topicIds)
+                : articleRepository.findByTopicIdsOrderByCreatedAtDesc(topicIds);
+
+        return articles.stream().map(this::toResponse).toList();
     }
 
     public ArticleResponse createArticle(String userEmail, ArticleRequest request) {
@@ -67,6 +73,15 @@ public class ArticleService {
     }
 
     private ArticleResponse toResponse(Article article) {
+        List<CommentResponse> comments = commentRepository.findByArticleOrderByCreatedAtAsc(article)
+                .stream()
+                .map(c -> CommentResponse.builder()
+                        .id(c.getId())
+                        .content(c.getContent())
+                        .authorUsername(c.getAuthor().getDisplayUsername())
+                        .createdAt(c.getCreatedAt())
+                        .build())
+                .toList();
 
         return ArticleResponse.builder()
                 .id(article.getId())
@@ -75,16 +90,7 @@ public class ArticleService {
                 .authorUsername(article.getAuthor().getDisplayUsername())
                 .topicName(article.getTopic().getName())
                 .createdAt(article.getCreatedAt())
-                //.comments(comments)
+                .comments(comments)
                 .build();
     }
 }
-
-//  List<CommentResponse> comments = article.getComments().stream()
-//                .map(c -> CommentResponse.builder()
-//                        .id(c.getId())
-//                        .content(c.getContent())
-//                        .authorUsername(c.getAuthor().getDisplayUsername())
-//                        .createdAt(c.getCreatedAt())
-//                        .build())
-//                .toList();

@@ -15,4 +15,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     // Feed: articles from topics the user subscribes to, sorted by date desc
     @Query("SELECT a FROM Article a WHERE a.topic.id IN :topicIds ORDER BY a.createdAt DESC")
     List<Article> findByTopicIdsOrderByCreatedAtDesc(@Param("topicIds") List<Long> topicIds);
+
+    @Query("SELECT a FROM Article a WHERE a.topic.id IN :topicIds ORDER BY a.createdAt ASC")
+    List<Article> findByTopicIdsOrderByCreatedAtAsc(@Param("topicIds") List<Long> topicIds);
 }
