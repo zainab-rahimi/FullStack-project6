@@ -1,0 +1,114 @@
+.profile-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+}
+
+// ---- Form ----
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.form-input {
+  width: 100%;
+  max-width: 460px;
+  padding: 14px 16px;
+  border: 1.5px solid #7c5cbf;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #5a3ea1;
+    box-shadow: 0 0 0 3px rgba(124, 92, 191, 0.15);
+  }
+}
+
+.btn-save {
+  background-color: #7c5cbf;
+  color: white;
+  border: none;
+  padding: 12px 40px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #5a3ea1;
+  }
+}
+
+// ---- Divider ----
+.divider {
+  border: none;
+  border-top: 1.5px solid #ccc;
+  margin: 32px 0;
+}
+
+// ---- Subscriptions ----
+.subscriptions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.subscription-card {
+  background-color: #f0eff5;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: #444;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.btn-unsubscribe {
+  background-color: #7c5cbf;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: center;
+  width: 100%;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #5a3ea1;
+  }
+}
