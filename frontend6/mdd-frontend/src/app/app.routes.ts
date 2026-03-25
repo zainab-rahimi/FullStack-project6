@@ -9,5 +9,5 @@ export const routes: Routes = [
   { path: 'articles/create', loadComponent: () => import('./features/articles/pages/article-create/article-create').then(m => m.ArticleCreate) },
   { path: 'articles/:id', loadComponent: () => import('./features/articles/pages/article-detail/article-detail').then(m => m.ArticleDetail) },
   { path: 'topics', loadComponent: () => import('./features/topics/pages/topics-list/topics-list').then(m => m.TopicsList) },
-  { path: 'profile', redirectTo: '', pathMatch: 'full' },
+  { path: 'profile', loadComponent: () => import('./features/user/pages/profile/profile').then(m => m.Profile) },
 ];

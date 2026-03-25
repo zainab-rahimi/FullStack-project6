@@ -4,12 +4,39 @@
   padding: 0 20px;
 }
 
+.profile-title-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  margin: 0 auto 2rem;
+}
+
+.back-arrow {
+  position: absolute;
+  left: 0;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  text-decoration: none;
+  color: #333;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+
+  &:hover {
+    color: #000;
+  }
+}
+
 .section-title {
+  width: 100%;
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 24px;
+  margin: 0;
 }
 
 // ---- Form ----

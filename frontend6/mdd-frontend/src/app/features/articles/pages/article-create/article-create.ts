@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -11,18 +11,44 @@ import { Navbar } from '../../../../shared/components/navbar/navbar';
   imports: [ReactiveFormsModule, CommonModule, RouterLink, Navbar],
   templateUrl: './article-create.html',
   styleUrl: './article-create.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleCreate implements OnInit {
   articleForm: FormGroup;
   topics: TopicResponse[] = [];
   isLoading = false;
   errorMessage = '';
+  dropdownOpen = false;
+  selectedTopicName = '';
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.custom-select-wrapper')) {
+      this.dropdownOpen = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  selectTopic(topic: TopicResponse): void {
+    this.articleForm.get('topicId')!.setValue(topic.id);
+    this.articleForm.get('topicId')!.markAsTouched();
+    this.selectedTopicName = topic.name;
+    this.dropdownOpen = false;
+    this.cdr.markForCheck();
+  }
+
+  toggleDropdown(): void {
+    this.dropdownOpen = !this.dropdownOpen;
+    this.cdr.markForCheck();
+  }
 
   constructor(
     private fb: FormBuilder,
     private articleService: ArticleService,
     private topicService: TopicService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.articleForm = this.fb.group({
       topicId: ['', Validators.required],
@@ -34,13 +60,14 @@ export class ArticleCreate implements OnInit {
   ngOnInit(): void {
     this.topicService.getAllTopics().subscribe({
       next: (data) => {
-        this.topics = data;
-        this.topics = this.topics.filter((topic) => {
-          return topic.subscribed
-        });
+        this.topics = data.filter((topic) => topic.subscribed);
+        this.cdr.markForCheck();
       },
 
-      error: () => this.errorMessage = 'Impossible de charger les th\u00e8mes.'
+      error: () => {
+        this.errorMessage = 'Impossible de charger les thèmes.';
+        this.cdr.markForCheck();
+      }
     });
   }
 
@@ -56,6 +83,7 @@ export class ArticleCreate implements OnInit {
 
     this.isLoading = true;
     this.errorMessage = '';
+    this.cdr.markForCheck();
 
     const request = {
       ...this.articleForm.value,
@@ -67,8 +95,9 @@ export class ArticleCreate implements OnInit {
         this.router.navigate(['/articles']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Impossible de cr\u00e9er l\'article.';
+        this.errorMessage = err.error?.message || 'Impossible de créer l\'article.';
         this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }

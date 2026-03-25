@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { UserService, UpdateProfileRequest } from '../../../../core/services/user-service';
+import { TopicService } from '../../../../core/services/topic';
 
 @Component({
   selector: 'app-profile',
@@ -13,29 +15,62 @@ import { RouterModule } from '@angular/router';
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile {
-
+export class Profile implements OnInit { 
   username: string = '';
   email: string = '';
   password: string = '';
+  errorMessage = '';
+  successMessage = '';
 
-  subscriptions = [
-    {id: 1, title: 'Titre du thème', description: 'Description: blablabla'},
-    {id: 2, title: 'Titre du thème', description: 'Description: bla bla bla'}
-  ]
+  constructor(private location: Location,
+    private userService : UserService,
+    private topicService : TopicService
+  ) {}
 
+  goBack(): void {
+    this.location.back();
+  };
+
+  subscriptions :{
+    id: number, title: string, description: string }[] =[] ;
+  
   ngOnInit():void {
     this.loadUserProfile();
   }
 
   loadUserProfile(): void {
-    this.username = 'username';
-    this.email = 'email@email.fr';
+    this.userService.getProfile().subscribe({
+      next: (profile) => {
+        this.username = profile.username;
+        this.email = profile.email;
+        this.subscriptions = profile.subscriptions.map(s => ({
+          id: s.id,
+          title: s.title,
+          description: s.description
+        }));
+
+      },
+      error: () => this.errorMessage = 'Failed tp load profile.'
+    })
   }
   saveProfile(): void {
-    console.log('Saving profile: ', { username: this.username, email: this.email, password: this.password})
+    const request: UpdateProfileRequest = {
+      username: this.username,
+      email: this.email,
+      ...(this.password?.trim() ? {newPassword: this.password } : {})
+    };
+    this.userService.updateProfile(request).subscribe({
+      next: () => this.successMessage = 'Profile saved successfully',
+      error: () => this.errorMessage = 'Failed to save profile'
+    });
   }
+
   unsubscribe(subscriptionId: number): void {
-    this.subscriptions = this.subscriptions.filter(s => s.id !==subscriptionId)
+    this.topicService.unsubscribe(subscriptionId).subscribe({
+      next: () => {
+        this.subscriptions = this.subscriptions.filter(s => s.id !==subscriptionId)
+      },
+      error: () => this.errorMessage = 'Failed to unsubscribe'
+    });
   }
 }

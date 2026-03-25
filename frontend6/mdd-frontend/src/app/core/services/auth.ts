@@ -1,6 +1,6 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environement';
+import { environment } from '../../../environments/environment';
 import { tap } from 'rxjs/internal/operators/tap';
 import { isPlatformBrowser } from '@angular/common';
 

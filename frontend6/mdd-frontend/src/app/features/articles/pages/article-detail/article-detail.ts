@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,30 +11,34 @@ import { CommentCard } from '../../../../shared/components/comment-card/comment-
   imports: [CommonModule, FormsModule, Navbar, CommentCard],
   templateUrl: './article-detail.html',
   styleUrl: './article-detail.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleDetail implements OnInit {
-  article = signal<ArticleResponse | null>(null);
-  isLoading = signal(true);
-  errorMessage = signal('');
-  newComment = signal('');
-  isSubmitting = signal(false);
+  article: ArticleResponse | null = null;
+  isLoading = true;
+  errorMessage = '';
+  newComment = '';
+  isSubmitting = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private articleService: ArticleService
+    private articleService: ArticleService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.articleService.getArticle(id).subscribe({
       next: (data) => {
-        this.article.set(data);
-        this.isLoading.set(false);
+        this.article = data;
+        this.isLoading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
-        this.errorMessage.set("Impossible de charger l'article.");
-        this.isLoading.set(false);
+        this.errorMessage = "Impossible de charger l'article.";
+        this.isLoading = false;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -44,19 +48,20 @@ export class ArticleDetail implements OnInit {
   }
 
   submitComment(): void {
-    const content = this.newComment().trim();
-    const currentArticle = this.article();
-    if (!content || !currentArticle) return;
-    this.isSubmitting.set(true);
-    this.articleService.addComment(currentArticle.id, { content }).subscribe({
+    if (!this.newComment.trim() || !this.article) return;
+    this.isSubmitting = true;
+    this.articleService.addComment(this.article.id, { content: this.newComment.trim() }).subscribe({
       next: (comment) => {
-        this.article.update(a => a ? { ...a, comments: [...a.comments, comment] } : a);
-        this.newComment.set('');
-        this.isSubmitting.set(false);
+        this.article!.comments.push(comment);
+        this.newComment = '';
+        this.isSubmitting = false;
+        this.cdr.markForCheck();
       },
       error: () => {
-        this.isSubmitting.set(false);
+        this.isSubmitting = false;
+        this.cdr.markForCheck();
       }
     });
   }
 }
+

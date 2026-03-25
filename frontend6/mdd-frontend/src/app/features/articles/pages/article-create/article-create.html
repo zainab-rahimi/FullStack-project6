@@ -17,11 +17,24 @@
 
     <!-- Topic select -->
     <div class="form-field">
-      <select formControlName="topicId"
-              [class.input-error]="topicId?.invalid && topicId?.touched">
-        <option value="" disabled>Sélectionner un thème</option>
-        <option *ngFor="let topic of topics" [value]="topic.id">{{ topic.name }}</option>
-      </select>
+      <div class="custom-select-wrapper" [class.input-error]="topicId?.invalid && topicId?.touched">
+        <button type="button" class="custom-select-trigger" (click)="toggleDropdown()" [class.open]="dropdownOpen">
+          <span [class.placeholder]="!selectedTopicName">
+            {{ selectedTopicName || 'Sélectionner un thème' }}
+          </span>
+          <svg class="select-arrow" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <ul class="custom-select-dropdown" *ngIf="dropdownOpen">
+          <li *ngFor="let topic of topics"
+              class="custom-select-option"
+              [class.selected]="topic.id === topicId?.value"
+              (click)="selectTopic(topic)">
+            {{ topic.name }}
+          </li>
+        </ul>
+      </div>
       <span class="error-text" *ngIf="topicId?.touched && topicId?.hasError('required')">
         Veuillez sélectionner un thème
       </span>

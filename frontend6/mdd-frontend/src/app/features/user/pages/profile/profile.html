@@ -1,6 +1,9 @@
 <div class="profile-container">
-    <!--Profile section-->
-    <h2 class="section-title"> Profile utilisateur</h2>
+    <!-- Back arrow + Title -->
+    <div class="profile-title-row">
+        <button class="back-arrow" (click)="goBack()" aria-label="Retour">←</button>
+        <h2 class="section-title">Profile utilisateur</h2>
+    </div>
     <form class="profile-form" (ngSubmit)="saveProfile()">
         <input
         type="text"
