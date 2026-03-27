@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -14,6 +14,7 @@ import { TopicService } from '../../../../core/services/topic';
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Profile implements OnInit { 
   username: string = '';
@@ -24,7 +25,8 @@ export class Profile implements OnInit {
 
   constructor(private location: Location,
     private userService : UserService,
-    private topicService : TopicService
+    private topicService : TopicService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   goBack(): void {
@@ -48,9 +50,12 @@ export class Profile implements OnInit {
           title: s.title,
           description: s.description
         }));
-
+        this.cdr.markForCheck();
       },
-      error: () => this.errorMessage = 'Failed tp load profile.'
+      error: () => {
+        this.errorMessage = 'Failed to load profile.';
+        this.cdr.markForCheck();
+      }
     })
   }
   saveProfile(): void {
@@ -60,17 +65,27 @@ export class Profile implements OnInit {
       ...(this.password?.trim() ? {newPassword: this.password } : {})
     };
     this.userService.updateProfile(request).subscribe({
-      next: () => this.successMessage = 'Profile saved successfully',
-      error: () => this.errorMessage = 'Failed to save profile'
+      next: () => {
+        this.successMessage = 'Profile saved successfully';
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.errorMessage = 'Failed to save profile';
+        this.cdr.markForCheck();
+      }
     });
   }
 
   unsubscribe(subscriptionId: number): void {
     this.topicService.unsubscribe(subscriptionId).subscribe({
       next: () => {
-        this.subscriptions = this.subscriptions.filter(s => s.id !==subscriptionId)
+        this.subscriptions = this.subscriptions.filter(s => s.id !== subscriptionId);
+        this.cdr.markForCheck();
       },
-      error: () => this.errorMessage = 'Failed to unsubscribe'
+      error: () => {
+        this.errorMessage = 'Failed to unsubscribe';
+        this.cdr.markForCheck();
+      }
     });
   }
 }
